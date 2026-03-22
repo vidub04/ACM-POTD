@@ -41,5 +41,5 @@ public:
 
 ## 📸 Screenshot
 
-![Solution](your-image-name.png)
+![Solution](VidushiBhardwaj_POTD1.jpg)
 
