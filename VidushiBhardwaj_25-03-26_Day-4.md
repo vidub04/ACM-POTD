@@ -8,20 +8,19 @@ Given an array nums containing n distinct numbers in the range [0, n], return th
 
 ## Approach
 
-This approach solves the problem by first sorting the array and then checking for the first index where the value does not match the index.
+This approach uses the mathematical sum formula to find the missing number efficiently.
 
-After sorting, the array should ideally contain numbers from `0` to `n` in order. The algorithm iterates through the array and compares each element `nums[i]` with its index `i`. If a mismatch is found (`nums[i] != i`), that index is the missing number. A variable `a` is used to store this result.
+It calculates:
 
-Additionally, a counter `ctr` is used to check if the value `n` appears in the array. If no mismatch is found (`a == -1`) and `n` is not present (`ctr == 0`), then the missing number must be `n`, since all values from `0` to `n-1` are present.
+The actual sum of elements present in the array (sum)
+The expected sum of numbers from 0 to n (finsum)
 
-Time complexity is dominated by sorting, which is `O(n log n)`, and the space complexity is `O(1)` (ignoring the sorting implementation details).
+Since exactly one number is missing, the difference between the expected sum and the actual sum (finsum - sum) gives the missing value directly.
 
+This method avoids sorting or extra data structures, making it:
 
-
-###Complexity
-
-Time Complexity: O(n log n), since the array sorted.
-Space Complexity: O(1).
+Time Complexity: O(n)
+Space Complexity: O(1)
 
 
 
@@ -30,24 +29,15 @@ Space Complexity: O(1).
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
-        sort(nums.begin(),nums.end());
-        int n=nums.size();
-        int a=-1;
-        int ctr=0;
-        for(int i=0;i<n;i++){
-            if(nums[i]!=i){
-                a=i;
-                break;
-            }
-            if(nums[i]==n){
-                ctr++;
-            }
+        int sum=0;
+        int finsum=0;
+        for(int i=0;i<nums.size();i++){
+            sum+=nums[i];
         }
-        if(a==-1&&ctr==0){
-            return n;
-        }else{
-            return a;
-        }   
+        for(int i=0;i<=nums.size();i++){
+            finsum+=i;
+        }
+        return finsum-sum;  
     }
 };
 ## 📸 Screenshot
