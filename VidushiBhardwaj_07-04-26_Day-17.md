@@ -51,19 +51,16 @@ public:
             }
             st.push(num);
         }
-
         // Remaining elements → no greater
         while (!st.empty()) {
             nextGreater[st.top()] = -1;
             st.pop();
         }
-
         // Build result for nums1
         vector<int> result;
         for (int num : nums1) {
             result.push_back(nextGreater[num]);
         }
-
         return result;
     }
 };
