@@ -13,50 +13,58 @@ Return an array ans of length nums1.length such that ans[i] is the next greater 
 
 ## Approach
 
-Uses two pointers starting at the heads of both linked lists
-Each pointer moves one step at a time through its list
-When a pointer reaches the end, it switches to the head of the other list
-This makes both pointers travel equal total distance (lengthA + lengthB)
-If an intersection exists, both pointers meet at the intersecting node
-If no intersection exists, both pointers become null at the same time
-Time complexity is linear, O(n + m)
-Space complexity is constant, O(1)
+### 📝 Short Note: Next Greater Element (Monotonic Stack Approach)
+
+The **Next Greater Element** problem is efficiently solved using a **monotonic decreasing stack**. The idea is to traverse the array (`nums2`) and maintain a stack that stores elements in decreasing order.
+
+When a new element is encountered, we compare it with the top of the stack:
+
+* If the current element is **greater**, it becomes the *next greater element* for all smaller elements on the stack.
+* We keep popping from the stack and record their next greater values.
+* If no greater element exists, we assign `-1`.
+
+A hash map is used to store the next greater element for each number in `nums2`, allowing quick lookup when building the result for `nums1`.
+
+### Key Advantages:
+
+* Time Complexity: **O(n)**
+* Avoids brute force comparisons
+* Efficient due to single traversal
+
+This approach leverages the stack to process elements only once, making it optimal for such problems.
+
 
 
 
 ## 👨‍💻 Code
 
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
-
- //not solved
- 
 class Solution {
 public:
-    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        ListNode *temp=headA;
-        ListNode* temp2=headB;
-        while(headA!=headB){
-            if(headA==headB){
-                return headA;
-            }else if(headA==nullptr){
-                headA=temp2;
-            }else if(headB==nullptr){
-                headB=temp;
-            }else{
-                headA=headA->next;
-                headB=headB->next;
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int, int> nextGreater;
+        stack<int> st;
+        // Process nums2
+        for (int num : nums2) {
+            while (!st.empty() && st.top() < num) {
+                nextGreater[st.top()] = num;
+                st.pop();
             }
+            st.push(num);
         }
-        
-        return headA;
-        
+
+        // Remaining elements → no greater
+        while (!st.empty()) {
+            nextGreater[st.top()] = -1;
+            st.pop();
+        }
+
+        // Build result for nums1
+        vector<int> result;
+        for (int num : nums1) {
+            result.push_back(nextGreater[num]);
+        }
+
+        return result;
     }
 };
 ## 📸 Screenshot
