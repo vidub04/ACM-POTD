@@ -26,31 +26,28 @@ Note that after backspacing an empty text, the text will continue empty.
 
 
 ## 👨‍💻 Code
-#include <iostream>
-#include <stack>
-using namespace std;
-
-string process(string str) {
-    stack<char> st;
-    for (char c : str) {
-        if (c == '#') {
-            if (!st.empty()) st.pop();
-        } else {
-            st.push(c);
+class Solution {
+public:
+    string process(string str) {
+        string result = "";
+        
+        for (char c : str) {
+            if (c == '#') {
+                if (!result.empty()) {
+                    result.pop_back();
+                }
+            } else {
+                result.push_back(c);
+            }
         }
+        
+        return result;
     }
     
-    string result = "";
-    while (!st.empty()) {
-        result = st.top() + result;
-        st.pop();
+    bool backspaceCompare(string s, string t) {
+        return process(s) == process(t);
     }
-    return result;
-}
-
-bool backspaceCompare(string s, string t) {
-    return process(s) == process(t);
-}
+};
 
 ## 📸 Screenshot
 
