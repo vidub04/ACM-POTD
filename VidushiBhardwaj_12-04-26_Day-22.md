@@ -15,26 +15,75 @@ Return the modified image after performing the flood fill
 
 ## Approach
 
-Use stack
-For each char: if stack not empty and stack top is same letter but different case → pop
-Else push current char
-Return stack as string
-Core Idea: Stack removes bad pairs immediately as they form.
-Time: O(n) | Space: O(n)
+* Start from the source cell and note its original color
+* Change the current cell to the new color
+* Recursively visit all 4 directions (up, down, left, right)
+* Continue only if the neighbor has the original color and is within bounds
+* Recolored cells act as visited, preventing revisits
+* Early return avoids unnecessary recursion when color is already the same
+
+---
+
+**Time Complexity:**
+
+* **O(m × n)**
+* In the worst case, every cell is visited once
+
+---
+
+**Space Complexity:**
+
+* **O(m × n)** (worst case recursion stack)
+* Happens when the entire grid is one connected component
+* Average case is smaller depending on region size
+
 
 
 
 
 ## 👨‍💻 Code
 
-string makeGood(string s) {
-    string st;
-    for (char c : s) {
-        if (!st.empty()&&abs(st.back()-c)==32) st.pop_back();
-        else st+=c;
+class Solution {
+public:
+    void clr(int i, int j, vector<vector<int>>& image, int m, int n, int color) {
+
+        if (image[i][j] == color) return;
+
+        int og = image[i][j];
+
+        image[i][j] = color;
+
+
+
+        int a = i + 1;
+        int b = j + 1;
+        int c = i - 1;
+        int d = j - 1;
+
+        if (a < m && image[a][j] == og) {
+            clr(a, j, image, m, n, color);
+        } 
+
+        if (c >= 0 && image[c][j] == og) {
+            clr(c, j, image, m, n, color);
+        } 
+        if (d >= 0 && image[i][d] == og) {
+            clr(i, d, image, m, n, color);
+        } 
+        if (b < n && image[i][b] == og) {
+            clr(i, b, image, m, n, color);
+        }
     }
-    return st;
-}
+
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        int m = image.size();
+        int n = image[0].size();
+
+        clr(sr, sc, image, m, n, color);
+
+        return image;
+    }
+};
 ## 📸 Screenshot
 
-![Solution](VidushiBhardwaj_POTD21.jpg)
+![Solution](VidushiBhardwaj_POTD22.jpg)
